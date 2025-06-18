@@ -66,6 +66,11 @@ public class StatisticsPlaylistFragment
     private HistoryRecordManager recordManager;
 
     private List<StreamStatisticsEntry> processResult(final List<StreamStatisticsEntry> results) {
+        if (sortMode == StatisticSortMode.RANDOM) {
+            Collections.shuffle(results);
+            return results;
+        }
+
         final Comparator<StreamStatisticsEntry> comparator;
         switch (sortMode) {
             case LAST_PLAYED:
@@ -302,6 +307,11 @@ public class StatisticsPlaylistFragment
             sortMode = StatisticSortMode.MOST_PLAYED;
             setTitle(getString(R.string.title_most_played));
             headerBinding.sortButtonIcon.setImageResource(R.drawable.ic_history);
+            headerBinding.sortButtonText.setText(R.string.title_random);
+        } else if (sortMode == StatisticSortMode.MOST_PLAYED) {
+            sortMode = StatisticSortMode.RANDOM;
+            setTitle(getString(R.string.title_random));
+            headerBinding.sortButtonIcon.setImageResource(R.drawable.ic_shuffle);
             headerBinding.sortButtonText.setText(R.string.title_last_played);
         } else {
             sortMode = StatisticSortMode.LAST_PLAYED;
@@ -387,6 +397,7 @@ public class StatisticsPlaylistFragment
     private enum StatisticSortMode {
         LAST_PLAYED,
         MOST_PLAYED,
+        RANDOM,
     }
 }
 
