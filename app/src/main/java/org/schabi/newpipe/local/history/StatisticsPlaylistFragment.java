@@ -66,6 +66,11 @@ public class StatisticsPlaylistFragment
     private HistoryRecordManager recordManager;
 
     private List<StreamStatisticsEntry> processResult(final List<StreamStatisticsEntry> results) {
+        if (sortMode == StatisticSortMode.RANDOM) {
+            Collections.shuffle(results);
+            return results;
+        }
+
         final Comparator<StreamStatisticsEntry> comparator;
         switch (sortMode) {
             case LAST_PLAYED:
@@ -75,7 +80,7 @@ public class StatisticsPlaylistFragment
                 comparator = Comparator.comparingLong(StreamStatisticsEntry::getWatchCount);
                 break;
             default:
-                return null;
+                return results;
         }
         Collections.sort(results, comparator.reversed());
         return results;
@@ -387,6 +392,7 @@ public class StatisticsPlaylistFragment
     private enum StatisticSortMode {
         LAST_PLAYED,
         MOST_PLAYED,
+        RANDOM,
     }
 }
 
